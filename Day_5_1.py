@@ -3,17 +3,17 @@ import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
 
 
-SGTR_1 = pd.read_csv('DB/13_10004_60.csv')
+LOCA_1 = pd.read_csv('DB/(12, 100030, 50).csv')
 
 SGTR_1['La'] = 0 #라벨링 할 변수 초기화
-print(SGTR_1['La'])
+print(LOCA_1['La'])
 
 SGTR_1['La'].iloc[0:12] = 1 #0부터 12번까지 1
 plt.plot(SGTR_1['ZINST70'])
 plt.plot(SGTR_1['La'])
 plt.show()
 
-train_x = SGTR_1.loc[:, ['ZINST70', 'QPRZP']]
+train_x = SGTR_1.loc[:, ['ZINST70', 'QPRZP', 'BFV122']]
 scaler = MinMaxScaler()
 scaler.fit(train_x)
 
@@ -32,8 +32,8 @@ import tensorflow as tf
 model = tf.keras.models.Sequential([
     tf.keras.layers.Dense(2,
                           activation='sigmoid'),
-    tf.keras.layers.Dense(200, activation='sigmoid'),
-    tf.keras.layers.Dense(2,
+    tf.keras.layers.Dense(2000, activation='sigmoid'),
+    tf.keras.layers.Dense(20,
                           activation='softmax')
 ])
 out = model.predict(train_x[:])
@@ -41,7 +41,8 @@ out = model.predict(train_x[:])
 model.compile(optimizer='adam',
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
-model.fit(train_x, train_y, epochs=100)
+model.fit(train_x, train_y, epochs=1000)
+
 out_trained = model.predict(train_x[:])
 
 
